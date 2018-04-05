@@ -9,13 +9,15 @@ public class PercentDiscountPurchase extends Purchase {
     public PercentDiscountPurchase() {
         super();
     }
+
     public PercentDiscountPurchase(String name, int price, int numOfUnits, double discountPercent) {
         super(name, price, numOfUnits);
         this.discountPercent = discountPercent;
     }
 
     public  PercentDiscountPurchase(Scanner sc) {
-        this(sc.next(), (sc.nextInt()), sc.nextInt(), sc.nextDouble());
+        super(sc);
+        this.discountPercent = sc.nextDouble();
     }
 
     public double getDiscountPercent() {

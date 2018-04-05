@@ -15,7 +15,8 @@ public class PriceDiscountPurchase extends Purchase {
     }
 
     public PriceDiscountPurchase(Scanner sc) {
-        this(sc.next(), sc.nextInt(), sc.nextInt(), sc.nextInt());
+        super(sc);
+        this.discount = new Byn(sc.nextInt());
     }
 
     public Byn getDiscount() {
