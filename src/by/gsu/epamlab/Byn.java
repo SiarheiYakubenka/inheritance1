@@ -39,20 +39,13 @@ public class Byn implements Comparable<Byn> {
     }
 
     public Byn mul(double k, Rounding rounding, int scale) {
-        value = round(value * k, rounding, scale);
+        value = rounding.round(value * k, scale);
         return this;
     }
 
     public Byn round(Rounding rounding, int scale) {
-        value = round(value, rounding, scale);
+        value = rounding.round(value, scale);
         return  this;
-    }
-
-    private static int round(double roundedValue, Rounding rounding, int d) {
-        int[] tenPowD = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};
-        int tenPow = tenPowD[d];
-        int result = (int) rounding.roundFun(roundedValue / tenPow) * tenPow;
-        return result;
     }
 
     public Byn mul(double k, Rounding rounding) {
@@ -60,7 +53,7 @@ public class Byn implements Comparable<Byn> {
     }
 
     public Byn mul(double k) {
-        return mul(k, Rounding.ROUND);
+        return mul(k, Rounding.ROUND, 0);
     }
 
     @Override
@@ -79,5 +72,32 @@ public class Byn implements Comparable<Byn> {
     @Override
     public String toString() {
         return value / 100 + "." + value / 10 % 10 + value % 10;
+    }
+
+    public enum Rounding {
+        CEIL {
+            double roundFun(double d) {
+                return Math.ceil(d);
+            }
+        },
+        FLOOR {
+            double roundFun(double d) {
+                return Math.floor(d);
+            }
+        },
+        ROUND {
+            double roundFun(double d) {
+                return Math.round(d);
+            }
+        };
+
+        abstract double roundFun(double value);
+
+        int round(double roundedValue, int scale) {
+            int[] tenPowD = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};
+            int tenPow = tenPowD[scale];
+            int result = (int) roundFun(roundedValue / tenPow) * tenPow;
+            return result;
+        }
     }
 }
